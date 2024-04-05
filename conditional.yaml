@@ -1,0 +1,29 @@
+---
+- name: Perform OS-specific tasks
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install Nginx on Debian/Ubuntu
+      apt:
+        name: nginx
+        state: present
+      when: ansible_os_family == 'Debian'
+
+    - name: Install Nginx on CentOS/Amazon Linux
+      yum:
+        name: nginx
+        state: present
+      when: ansible_os_family == 'RedHat'
+
+    - name: Start Nginx service on Debian/Ubuntu
+      service:
+        name: nginx
+        state: started
+      when: ansible_os_family == 'Debian'
+
+    - name: Start Nginx service on CentOS/Amazon Linux
+      service:
+        name: nginx
+        state: started
+      when: ansible_os_family == 'RedHat'
+

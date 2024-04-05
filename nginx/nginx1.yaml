@@ -1,0 +1,42 @@
+---
+- name: Install and configure Nginx
+  hosts: webservers
+  become: yes
+  vars:
+    nginx_document_root: "/usr/share/nginx/html"
+
+  tasks:
+    - name: Update apt package cache
+      yum:
+        update_cache: yes
+
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: latest
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Copy index.html
+      copy:
+        src: /etc/ansible/index.html
+        dest: /usr/share/nginx/html/index.html
+
+
+    - name: Configure Nginx document root
+      lineinfile:
+        path: /etc/nginx/nginx.conf
+        regexp: '^\s*root\s+.*;'
+        line: '    root {{ nginx_document_root }};'
+      notify: Reload Nginx
+
+  handlers:
+    - name: Reload Nginx
+      service:
+        name: nginx
+        state: reloaded
+
