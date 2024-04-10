@@ -1,0 +1,9 @@
+---
+- name: Copy index.html File
+  hosts: webservers
+  tasks:
+    - name: Copy index.html file
+      copy:
+        src: /etc/ansible/index.html
+        dest: /usr/share/nginx/html/index.html
+

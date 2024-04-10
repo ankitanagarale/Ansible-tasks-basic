@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+    - name: Copy app files
+      copy:
+        src: /etc/ansible/my-app-folder/
+        dest: /home/ansible/my-app
+        force: no
+    - debug: msg="Success"
